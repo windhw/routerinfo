@@ -15,6 +15,12 @@ import subprocess
 from   subprocess import Popen, PIPE
 from email.mime import text
 
+#Please Edit The Below 3 lines
+router_url =  "http://192.168.1.1/userRpm/StatusRpm.htm"    #router url
+header     = { "Authorization" : "Basic XXXXXXXXXXXXXXXX" } # Your router's auth code 
+repo_path  = "/root/cubiebox/"  #this is your local repo path(/path/to/repo)
+
+
 def call_sys(cmd, **kwarg):
     kwarg["stdout"] = PIPE
     kwarg["stderr"] = PIPE
@@ -100,8 +106,5 @@ def daemon():
 
 if __name__ == '__main__':
     daemon()
-    router_url =  "http://192.168.1.1/userRpm/StatusRpm.htm"    #
-    header     = { "Authorization" : "Basic XXXXXXXXXXXXXXXX" } #
-    repo_path  = "/root/cubiebox/"
     reporter = RouterReporter(router_url, repo_path, header)
     reporter.start_task()
