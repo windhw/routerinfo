@@ -1,0 +1,60 @@
+#!/bin/sh
+
+### BEGIN INIT INFO
+# Provides:          router
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:
+# Short-Description: starts the router report
+# Description:       sstarts the router report
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/root/router.py
+NAME=router
+DESC=router
+stop()
+{
+     router_pid=`ps -o pid,cmd -u root | awk '/router.py$/ {print $1}'`
+     if [ -z $router_pid ] 
+     then
+     echo no ssh router process found
+     else
+     kill $router_pid
+     echo process $router_pid killed
+     fi
+}
+status()
+{
+     router_pid=`ps -o pid,cmd -u root | awk '/router.py$/ {print $1}'`
+     if [ -z $router_pid ] 
+     then
+     echo Not running
+     else
+     echo Running
+      fi
+}
+
+
+case "$1" in
+	start)
+                #echo -n "Starting $DESC: "
+		echo  "Starting $DESC "
+                /usr/bin/python $DAEMON 
+                status
+		;;
+
+	stop)
+                stop
+		;;
+        status)
+                status
+                ;;
+	*)
+		echo "Usage: $NAME {start|stop|status}" >&2
+		exit 1
+		;;
+esac
+
+exit 0
